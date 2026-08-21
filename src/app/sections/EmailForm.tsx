@@ -29,7 +29,7 @@ export function EmailForm() {
   };
 
   return (
-    <section className="relative w-full bg-cream-dark px-6 py-16 text-center sm:px-8 sm:py-20 lg:py-24">
+    <section className="relative w-full bg-ivory px-6 py-16 text-center sm:px-8 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-xl">
         <form
           ref={formRef}

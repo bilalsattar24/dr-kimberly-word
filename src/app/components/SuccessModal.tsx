@@ -34,7 +34,7 @@ export function SuccessModal({ isOpen, onClose, message }: SuccessModalProps) {
       onClick={onClose}
     >
       <div
-        className="max-w-md rounded-sm bg-cream p-8 text-center shadow-2xl sm:p-10"
+        className="max-w-md rounded-sm bg-ivory-light p-8 text-center shadow-2xl sm:p-10"
         onClick={(e) => e.stopPropagation()}
       >
         <h3

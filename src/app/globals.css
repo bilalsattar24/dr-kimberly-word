@@ -1,16 +1,19 @@
 @import "tailwindcss";
 
+/* stylelint-disable at-rule-no-unknown */
+/* @theme is a valid Tailwind CSS v4 at-rule. The project build and npm run lint both pass; this warning comes from the editor's CSS language server not yet recognizing the new syntax. */
+
 :root {
   --background: #f9f6f0;
   --foreground: #1b4f72;
 }
 
 @theme inline {
-  --color-hero-blue: #1b4f72;
+  --color-hero-blue: #185d8a;
   --color-gold: #c9a227;
   --color-gold-light: #d8b84a;
-  --color-cream: #f9f6f0;
-  --color-cream-dark: #f0ebe3;
+  --color-ivory-light: #f9f6f0;
+  --color-ivory: #f2ede5;
   --color-forest: #3d6b4f;
   --color-forest-muted: #4a7c59;
 

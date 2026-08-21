@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 50" width="40" height="50">
-  <text x="50%" y="42%" dominant-baseline="middle" text-anchor="middle" fill="#c9a227" font-family="serif" font-size="28" font-style="italic">K</text>
-  <text x="50%" y="78%" dominant-baseline="middle" text-anchor="middle" fill="#c9a227" font-family="serif" font-size="28" font-style="italic">W</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 72" width="48" height="72">
+  <text x="24" y="22" dominant-baseline="middle" text-anchor="middle" fill="#c9a227" font-family="serif" font-size="32" font-weight="400">K</text>
+  <line x1="8" y1="36" x2="40" y2="36" stroke="#c9a227" stroke-width="1.5" />
+  <text x="24" y="56" dominant-baseline="middle" text-anchor="middle" fill="#c9a227" font-family="serif" font-size="32" font-weight="400">W</text>
 </svg>

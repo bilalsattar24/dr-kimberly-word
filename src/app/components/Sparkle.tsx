@@ -18,6 +18,7 @@ export function Sparkle({
       width={width}
       height={height}
       className={`inline-block ${className}`}
+      style={{ width: "auto", height: "auto" }}
       aria-hidden="true"
     />
   );
