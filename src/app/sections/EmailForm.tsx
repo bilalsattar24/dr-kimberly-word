@@ -1,39 +1,73 @@
-import Script from "next/script";
-import { Sparkle } from "@/app/components/Sparkle";
+"use client";
 
-const FORM_ID = "tSOQPbyIH3OSsZcVqTwZ";
+import { useState, useTransition, useRef } from "react";
+import { subscribeToList, SubscribeState } from "@/app/actions";
+import { Sparkle } from "@/app/components/Sparkle";
+import { SuccessModal } from "@/app/components/SuccessModal";
+
+const initialState: SubscribeState = {
+  success: false,
+  message: "",
+};
 
 export function EmailForm() {
+  const [state, setState] = useState<SubscribeState>(initialState);
+  const [pending, startTransition] = useTransition();
+  const [showModal, setShowModal] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleSubmit = (formData: FormData) => {
+    setShowModal(false);
+    startTransition(async () => {
+      const next = await subscribeToList(initialState, formData);
+      setState(next);
+      if (next.success) {
+        setShowModal(true);
+        formRef.current?.reset();
+      }
+    });
+  };
+
   return (
     <section className="relative w-full bg-ivory px-6 py-16 text-center sm:px-8 sm:py-20 lg:py-24">
-      <div className="mx-auto w-full max-w-xl">
-        <div className="w-full overflow-hidden rounded-lg">
-          <iframe
-            src={`https://api.leadconnectorhq.com/widget/form/${FORM_ID}`}
-            style={{
-              width: "100%",
-              height: "100%",
-              minHeight: 640,
-              border: "none",
-              borderRadius: 8,
-            }}
-            id={`inline-${FORM_ID}`}
-            data-layout="{'id':'INLINE'}"
-            data-trigger-type="alwaysShow"
-            data-trigger-value=""
-            data-activation-type="alwaysActivated"
-            data-activation-value=""
-            data-deactivation-type="neverDeactivate"
-            data-deactivation-value=""
-            data-form-name="Dr. Kimberly Word Rebrand Newsletter"
-            data-height="undefined"
-            data-layout-iframe-id={`inline-${FORM_ID}`}
-            data-form-id={FORM_ID}
-            data-cookie-consent="true"
-            data-cookie-consent-provider="auto"
-            title="Dr. Kimberly Word Rebrand Newsletter"
-          />
-        </div>
+      <div className="mx-auto max-w-xl">
+        <form
+          ref={formRef}
+          action={handleSubmit}
+          className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-3"
+        >
+          <div className="relative w-full sm:w-auto sm:flex-1">
+            <input
+              type="email"
+              name="email"
+              id="email"
+              required
+              autoComplete="email"
+              placeholder=" "
+              className="peer h-14 w-full appearance-none rounded-none border-0 bg-white px-4 pt-6 pb-2 font-sans text-sm text-hero-blue placeholder-transparent focus:ring-2 focus:ring-gold focus:outline-none"
+            />
+            <label
+              htmlFor="email"
+              className="absolute left-4 top-1/2 -translate-y-1/2 origin-top-left font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-forest transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-xs peer-placeholder-shown:font-medium peer-focus:top-3 peer-focus:-translate-y-0 peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:top-3 peer-[:not(:placeholder-shown)]:-translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px]"
+            >
+              Email Address
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            disabled={pending}
+            className="h-14 w-full rounded-none bg-gradient-to-r from-gold to-gold-light px-6 font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-white transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:px-8"
+          >
+            {pending ? "Joining..." : "Join the List"}
+          </button>
+        </form>
+
+        {state.success === false && state.message && (
+          <p className="mt-4 font-sans text-sm text-red-600" aria-live="polite">
+            {state.message}
+          </p>
+        )}
 
         <p className="mt-6 font-sans text-[10px] font-semibold uppercase tracking-[0.25em] text-forest">
           Join the list to receive your invitation
@@ -50,9 +84,14 @@ export function EmailForm() {
         </p>
       </footer>
 
-      <Script
-        src="https://link.msgsndr.com/js/form_embed.js"
-        strategy="afterInteractive"
+      <SuccessModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        message={
+          typeof state === "object" && "message" in state
+            ? state.message
+            : "Your email has been added to the invitation list. Please check your email later."
+        }
       />
     </section>
   );
