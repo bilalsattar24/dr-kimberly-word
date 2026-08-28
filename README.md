@@ -1,6 +1,6 @@
 # Dr. Kimberly Word — Holding Page
 
-A responsive Next.js (App Router) holding page for Dr. Kimberly Word. Visitors can join an invitation list; their email is added to a Resend Audience and an invitation email is sent automatically.
+A responsive Next.js (App Router) holding page for Dr. Kimberly Word. Visitors can join an invitation list by submitting their email; the email is sent to a GoHighLevel Inbound Webhook, which creates the contact and sends a welcome email.
 
 ## Tech Stack
 
@@ -8,7 +8,7 @@ A responsive Next.js (App Router) holding page for Dr. Kimberly Word. Visitors c
 - React 19
 - TypeScript
 - Tailwind CSS v4
-- Resend (email + audiences)
+- GoHighLevel (inbound webhook + contact creation + email)
 - Zod (form validation)
 
 ## Page Structure
@@ -70,12 +70,10 @@ cp .env.local.example .env.local
 3. Fill in the environment variables:
 
 ```env
-RESEND_API_KEY=re_xxxxxxxxxxxx
-RESEND_AUDIENCE_ID=aud_xxxxxxxxxxxx
-EMAIL_FROM="Dr. Kimberly Word <onboarding@resend.dev>"
+GHL_WEBHOOK_URL=https://services.leadconnectorhq.com/hooks/...
 ```
 
-> **Note:** For Resend to send from a custom domain, you must verify the domain in the Resend dashboard. Until then, you can test with a `@resend.dev` address.
+> **Note:** This URL comes from the Inbound Webhook trigger in your GoHighLevel workflow. The Next.js server action POSTs the submitted email to this URL; GoHighLevel then creates the contact and sends the welcome email.
 
 4. Run the dev server:
 
@@ -99,9 +97,9 @@ npm run lint
 
 ## Deploying to Vercel
 
-1. Add the environment variables from `.env.local` to the Vercel project settings.
+1. Add `GHL_WEBHOOK_URL` from `.env.local` to the Vercel project settings.
 
-2. Verify your Resend sending domain and update `EMAIL_FROM` to a custom address (e.g., `Dr. Kimberly Word <hello@drkimberlyword.com>`).
+2. Make sure the GoHighLevel workflow is published and its email action is configured.
 
 3. Deploy — the site is statically generated with a single `/` route and a server action for email signup.
 
@@ -109,6 +107,6 @@ npm run lint
 
 - **Colors and fonts** — `src/app/globals.css` and `src/app/layout.tsx`
 - **Page sections** — `src/app/sections/Hero.tsx`, `Message.tsx`, `EmailForm.tsx`
-- **Email template** — `src/app/actions.ts` (inline HTML)
+- **Email submission action** — `src/app/actions.ts` (POSTs to GoHighLevel webhook)
 - **Success modal** — `src/app/components/SuccessModal.tsx`
 - **Sparkle component** — `src/app/components/Sparkle.tsx`
